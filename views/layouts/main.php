@@ -42,6 +42,7 @@ AppAsset::register($this);
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Hello World', 'url' => ['/hello/world']], // Hello World Add
+            ['label' => 'ADMIN INDEX', 'url' => ['/admin/super/index']], // Admin Super Index
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (

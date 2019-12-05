@@ -65,6 +65,12 @@ $config = [
         'comp' => [
             'class' => \app\components\Comp::class,
         ],
+        /*
+         * Роли для пользователей
+         */
+        'authManager' => [
+            'class' => \yii\rbac\DbManager::class,
+        ],
     ],
 
 

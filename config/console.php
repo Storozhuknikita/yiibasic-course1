@@ -26,6 +26,12 @@ $config = [
             ],
         ],
         'db' => $db,
+        /*
+         * Роли для пользователей
+         */
+        'authManager' => [
+            'class' => \yii\rbac\DbManager::class,
+        ],
     ],
     'params' => $params,
     /*

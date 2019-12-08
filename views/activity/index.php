@@ -28,8 +28,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'title',
-            'started_at',
-            'finished_at',
+            'started_at:datetime',
+            'finished_at:datetime',
             'author_id',
             //'main',
             //'cycle',

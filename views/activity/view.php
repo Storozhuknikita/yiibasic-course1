@@ -10,9 +10,12 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Activities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
-echo'<pre>';
-var_dump($model->users);
-echo'</pre>';
+
+/*foreach($model->users as $user){
+    echo'<pre>';
+    var_dump($user);
+    echo'</pre>';
+}*/
 ?>
 <div class="activity-view">
 

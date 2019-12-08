@@ -78,6 +78,8 @@ class ActivityController extends Controller
     public function actionCreate()
     {
         $model = new Activity();
+        // Врмея создания
+        $model->created_at = time();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -98,6 +100,8 @@ class ActivityController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        // Время редактирования
+        $model->updated_at = time();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

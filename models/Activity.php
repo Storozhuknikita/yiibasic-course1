@@ -39,6 +39,15 @@ class Activity extends \yii\db\ActiveRecord
         return [
             [['started_at', 'finished_at', 'author_id', 'main', 'cycle', 'created_at', 'updated_at'], 'integer'],
             [['title'], 'string', 'max' => 255],
+            /**
+             * Доп условие для проверки
+             * Задание 3.1, 3.2
+             */
+            ['finished_at', 'default', 'value' => function($model, $attribute) {
+                return $model->started_at;   }],
+            ['finished_at', 'compare', 'compareAttribute' =>
+                'started_at', 'operator' => '>=', 'type' => 'number'],
+
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
         ];
     }

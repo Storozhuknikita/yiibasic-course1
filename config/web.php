@@ -71,6 +71,14 @@ $config = [
         'authManager' => [
             'class' => \yii\rbac\DbManager::class,
         ],
+
+        /**
+         * Настройки для даты
+         */
+        'formatter' => [
+            'defaultTimeZone' => 'Europe/Moscow',
+            'timeZone' => 'GMT+3'
+        ],
     ],
 
 

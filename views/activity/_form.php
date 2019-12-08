@@ -14,7 +14,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'started_at')->textInput() ?>
+    <?= $form->field($model, 'started_at')->textInput([
+    'maxlength' => true,
+    'disabled'=> true,
+    'value' => Yii::$app->formatter->asDatetime($model->started_at, 'php:d.m.Y H:i:s'),
+    ]) ?>
+
 
     <?= $form->field($model, 'finished_at')->textInput() ?>
 

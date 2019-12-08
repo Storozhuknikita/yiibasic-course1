@@ -34,13 +34,13 @@ echo'</pre>';
         'attributes' => [
             'id',
             'title',
-            'started_at',
-            'finished_at',
+            'started_at:datetime',
+            'finished_at:datetime',
             'author_id',
             'main',
             'cycle',
-            'created_at',
-            'updated_at',
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
 

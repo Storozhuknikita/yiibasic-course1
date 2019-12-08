@@ -26,11 +26,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
             'title',
             'started_at:datetime',
             'finished_at:datetime',
-            'author_id',
+            [
+                'attribute' => 'author_id',
+                'value' => function ($data) {
+                    return \app\models\User::findOne($data->author_id)->username;
+                },
+            ],
             //'main',
             //'cycle',
             //'created_at',

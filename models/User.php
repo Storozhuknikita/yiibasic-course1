@@ -1,13 +1,11 @@
 <?php
 
 namespace app\models;
-
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-
 /**
  * User model
  *
@@ -20,14 +18,13 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
- * @property string
+ * @property Activity[] $activities
  * @property string $password write-only password
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-
     /**
      * @inheritdoc
      */
@@ -35,7 +32,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return '{{%user}}';
     }
-
     /**
      * @inheritdoc
      */
@@ -43,13 +39,12 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [
-            'class' => TimestampBehavior::class,
-            'attributes' => ['created_at', 'updated_at'],
-            'value' => time()
-        ]
+                'class' => TimestampBehavior::class,
+                'attributes' => ['created_at', 'updated_at'],
+                'value' => time()
+            ]
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -60,7 +55,6 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -68,7 +62,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
-
     /**
      * @inheritdoc
      */
@@ -76,7 +69,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
-
     /**
      * Finds user by username
      *
@@ -87,7 +79,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
-
     /**
      * @inheritdoc
      */
@@ -95,7 +86,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->getPrimaryKey();
     }
-
     /**
      * @inheritdoc
      */
@@ -103,7 +93,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->auth_key;
     }
-
     /**
      * @inheritdoc
      */
@@ -111,7 +100,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->getAuthKey() === $authKey;
     }
-
     /**
      * Validates password
      *
@@ -122,17 +110,15 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
-
     /**
      * Generates password hash from password and sets it to the model
-     *
-     * @param string $password
+     * @param $password
+     * @throws \yii\base\Exception
      */
     public function setPassword($password)
     {
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
-
     /**
      * Generates "remember me" authentication key
      */
@@ -140,22 +126,11 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->auth_key = Yii::$app->security->generateRandomString();
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getActivities()
     {
-        return $this->hasMany(Activity::className(), ['author_id' => 'id']);
+        return $this->hasMany(Activity::class, ['author_id' => 'id']);
     }
-
-    /**
-     * @throws \yii\base\Exception
-     * Генерация токена для восстановления пароля
-     */
-    public function generateAccessToken()
-    {
-        $this->access_token = Yii::$app->security->generateRandomString();
-    }
-
 }

@@ -5,14 +5,16 @@
  */
 namespace app\modules\admin\controllers;
 
+use yii\helpers\Url;
+
 class DefaultController extends \yii\web\Controller
 {
 
-    /**
-     * @return bool
-     */
     public function actionIndex()
     {
-        return $this->render('index');
+        if (\Yii::$app->user->can('admin')) {
+            return $this->render('index');
+        } else \Yii::$app->response->redirect(Url::to('/yiibasic-course1/web/'));
     }
+
 }

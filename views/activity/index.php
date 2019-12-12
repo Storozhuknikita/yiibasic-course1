@@ -7,8 +7,10 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\search\ActivitySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$this->params['breadcrumbs'][] = ['label' => 'Панель управления', 'url' => ['/admin']];
 $this->title = 'Activities';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="activity-index">
 

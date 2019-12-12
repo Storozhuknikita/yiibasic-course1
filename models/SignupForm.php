@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use yii\db\ActiveRecord;
 
 /**
  * Signup form
@@ -52,6 +53,11 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
+        /**
+         * Bug fix for 6 lesson for registration
+         */
+        $user->created_at = time();
+        $user->updated_at = time();
 
         return $user->save() ? $user : null;
     }

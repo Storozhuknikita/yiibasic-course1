@@ -30,6 +30,7 @@ class ActivitySearch extends Activity
             [['title'], 'safe'],
             [['authorEmail'], 'string'],
             [['started_at'], 'date', 'format' => 'php:d.m.Y'],
+            [['finished_at'], 'date', 'format' => 'php:d.m.Y'],
         ];
     }
 

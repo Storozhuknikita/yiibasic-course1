@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($model->author->email, ['/user/view', 'id' => $model->author->id]);
                 }
             ],
-            //'main',
+            'main',
             //'cycle',
             //'created_at',
             //'updated_at',

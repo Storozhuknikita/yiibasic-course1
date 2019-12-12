@@ -78,11 +78,10 @@ $config = [
          * Настройки для даты
          */
         'formatter' => [
-            'dateFormat' => 'php:d.m.Y',
-            'datetimeFormat' => 'php:d.m.Y H:i:s',
             'defaultTimeZone' => 'Europe/Moscow',
             'timeZone' => 'GMT+3',
-            'locale' => 'ru-RU'
+            'dateFormat' => 'php:d.m.Y',
+            'datetimeFormat' => 'php:d.m.Y H:i:s',
         ],
     ],
 

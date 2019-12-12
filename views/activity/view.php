@@ -38,13 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'title',
             'started_at:datetime',
-            [
-                'attribute' => 'finished_at',
-                'label' => 'Дата и время окончания',
-                'value' => function (\app\models\Activity $model) {
-                    return Yii::$app->formatter->asDatetime($model->finished_at);
-                },
-            ],
+            'finished_at:datetime',
+            'author_id',
             [
                 'attribute' => 'main',
                 'value' => function (\app\models\Activity $model) {
@@ -52,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'cycle:boolean',
-            'created_at:date',
+            'created_at:datetime',
             'updated_at:datetime',
         ],
     ]) ?>

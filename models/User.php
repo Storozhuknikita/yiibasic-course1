@@ -42,7 +42,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            [
+            'class' => TimestampBehavior::class,
+            'attributes' => ['created_at', 'updated_at'],
+            'value' => time()
+        ]
         ];
     }
 
@@ -143,6 +147,15 @@ class User extends ActiveRecord implements IdentityInterface
     public function getActivities()
     {
         return $this->hasMany(Activity::className(), ['author_id' => 'id']);
+    }
+
+    /**
+     * @throws \yii\base\Exception
+     * Генерация токена для восстановления пароля
+     */
+    public function generateAccessToken()
+    {
+        $this->access_token = Yii::$app->security->generateRandomString();
     }
 
 }

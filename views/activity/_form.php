@@ -46,9 +46,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'author_id')->dropDownList(\yii\helpers\ArrayHelper::map(\app\models\User::find()->orderBy(['username'=>SORT_ASC])->where(['status' => 10])->all(), 'id', 'username')) ?>
 
-    <?= $form->field($model, 'main')->textInput() ?>
+    <?= $form->field($model, 'main')->checkbox() ?>
 
-    <?= $form->field($model, 'cycle')->textInput() ?>
+    <?= $form->field($model, 'cycle')->checkbox() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

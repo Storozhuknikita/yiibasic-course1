@@ -1,4 +1,13 @@
 <?php
+/**
+ * Задание Урок 4
+ * 1. Мы создали таблицу для сущности activity. Вам нужно создать оставшиеся таблицы.
+    * a.Пользователи ( * внимательно посмотрите на встроенную систему авторизации и то, как в ней устроены модели пользователей. Мы разберём её в следующей лекции, но можно забежать чуть вперёд).
+    * b. Связка пользователей и событий.
+    * c. * Какие ещё сущности будут нужны для проекта?
+ * 2. Создайте миграции для всех перечисленных Вами сущностей.
+ */
+
 namespace app\controllers;
 
 use app\models\HelperForm;
@@ -51,7 +60,76 @@ class HelloController extends Controller
             }
         }
 
-        return $this->render('forms', ['model'=>$model]);
+        return $this->render('forms', ['model' => $model]);
     }
+
+
+    public function actionFillDb(){
+        for($i=0; $i<10; $i++){
+            try {
+                \Yii::beginProfile("title $i", 'testing'); //
+                \Yii::beginProfile("title $i 1", 'testing'); //
+                \Yii::beginProfile("title $i 2", 'testing'); //
+
+                \Yii::$app->db->beginTransaction();
+                $query = \Yii::$app->db->createCommand()->insert('activity', [
+                    'title' => "title $i",
+                    'created_at' => time(),
+                    'started_at' => time() + $i * 60 * 60 * 24,
+                    'finished_at' => time() + ($i + 1) * 60 * 60 * 24,
+                    'cycle' => false,
+                    'main' => false,
+                    'user_id' => $i
+                ]);
+
+                print_r($query->getRawSql() . '<br/>');
+                $query->execute();
+
+                \Yii::endProfile("title $i", 'testing'); //
+                \Yii::endProfile("title $i 1", 'testing'); //
+                \Yii::endProfile("title $i 2", 'testing'); //
+
+                \Yii::$app->db->transaction->commit();
+            } catch (\Throwable $exception){
+                \Yii::$app->db->transaction->rollBack();
+
+            }
+
+            /*if($i>5){
+                \Yii::$app->db->transaction->commit();
+            }else{
+                \Yii::$app->db->transaction->rollBack();
+            }*/
+        }
+
+        return $this->render('world');
+
+    }
+
+    public function actionQuery($id){
+
+        $query = \Yii::$app->db->createCommand('SELECT * FROM activity WHERE id > :id')->bindValue(':id', $id);
+        echo $query->getRawSql();
+
+        $result = $query->queryAll();
+
+        var_dump($result);
+        die;
+    }
+
+
+    public function actionUpdate($id){
+
+        $query = \Yii::$app->db->createCommand()->update('activity',
+            ['id'=> $id, 'title'=>'updated_at', 'updated_at' => time()],
+            'id=:id', ['id' => $id]);
+
+        echo $query->getRawSql();
+        $query->execute();
+
+    }
+
+
+
 
 }

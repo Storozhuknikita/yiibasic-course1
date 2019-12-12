@@ -1,7 +1,6 @@
 <?php
 
 namespace app\controllers;
-
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -9,6 +8,9 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\User;
+use app\models\SignupForm;
+
 
 class SiteController extends Controller
 {
@@ -19,13 +21,18 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'class' => AccessControl::class,
+                'only' => ['logout', 'admin'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['admin'],
+                        'allow' => true,
+                        'roles' => ['admin']
                     ],
                 ],
             ],
@@ -125,4 +132,35 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+
+    /**
+     * @return string|Response
+     * Регистрация
+     */
+    public function actionSignup()
+    {
+        $model = new SignupForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {
+                if (Yii::$app->getUser()->login($user)) {
+                    return $this->goHome();
+                }
+            }
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Для админа
+     */
+    public function actionAdmin()
+    {
+        echo "hello admin";
+    }
+
 }

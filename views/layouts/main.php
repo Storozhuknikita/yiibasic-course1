@@ -43,8 +43,12 @@ AppAsset::register($this);
             ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Hello World', 'url' => ['/hello/world']], // Hello World Add
             ['label' => 'ADMIN INDEX', 'url' => ['/admin/super/index']], // Admin Super Index
+
+            ['label' => 'Registration', 'url' => ['/site/signup']], // Регистрация
+
+
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+                ['label' => 'Login', 'url' => ['/site/login']]  // Авторизация
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')

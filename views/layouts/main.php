@@ -26,23 +26,28 @@ AppAsset::register($this);
     <div class="wrap">
         <?php
         NavBar::begin([
-            'brandLabel' => 'My Company',
+            'brandLabel' => 'Task Manager',
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar-inverse navbar-fixed-top',
             ],
         ]);
         $menuItems = [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'About', 'url' => ['/about']],
+            ['label' => 'Contact', 'url' => ['/contact']]
         ];
         if (Yii::$app->user->isGuest) {
             $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
             $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
         } else {
+            // для авторизованных
+            $menuItems[] = ['label' => 'Profile', 'url' => ['/user/profile']];
+            $menuItems[] = ['label' => 'Calendar', 'url' => ['/user/calendar']];
+            $menuItems[] = ['label' => 'Activities', 'url' => ['/activity/index']];
+
+            // только для админа
             if (\Yii::$app->user->can('admin')) {
-                $menuItems[] = ['label' => 'Admin', 'url' => ['/admin']];
+                $menuItems[] = ['label' => 'Admin Panel', 'url' => ['/admin']];
             }
             $menuItems[] = '<li>'
                 . Html::beginForm(['/site/logout'], 'post')

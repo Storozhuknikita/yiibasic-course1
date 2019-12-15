@@ -15,18 +15,22 @@ b. Дата окончания не могла бы быть меньше дат
  */
 namespace app\controllers;
 
+use edofre\fullcalendar\models\Event;
+use PHPUnit\Util\Log\JUnit;
 use Yii;
 use app\models\Activity;
 use app\models\search\ActivitySearch;
-use yii\web\Controller;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * ActivityController implements the CRUD actions for Activity model.
  */
-class ActivityController extends Controller
+class ActivityController extends BaseController
 {
+
+    public $events;
     /**
      * {@inheritdoc}
      */
@@ -49,12 +53,45 @@ class ActivityController extends Controller
     public function actionIndex()
     {
         $searchModel = new ActivitySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $query = Yii::$app->request->queryParams;
+        $dataProvider = $searchModel->search( $query, true );
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    /**
+     * Получение списка активностей для календаря для конкретного пользователя
+     * @param int $userId
+     * @return array
+     *
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function actionEvents( int $userId ) {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $activitiesList = Activity::findAll([ 'author_id' => $userId ]);
+        $calendarEvents = [];
+
+        if ( $activitiesList && is_array($activitiesList) && count( $activitiesList )) {
+            foreach ( $activitiesList as $activity ) {
+
+                $calendarEvents[] = new Event([
+                    'id' => $activity->id,
+                    'title' => $activity->title,
+                    'start' => Yii::$app->formatter->asDatetime($activity->started_at, 'php:Y-m-d H:i:s' ),
+                    'end' =>  Yii::$app->formatter->asDatetime($activity->finished_at, 'php:Y-m-d H:i:s' ),
+
+                    'editable'         => true,
+                    'startEditable'    => true,
+                    'durationEditable' => true,
+                    'color'             => 'red',
+                    'url' => Url::to(['activity/view', 'id' => $activity->id])
+                ]);
+            }
+        }
+        return $calendarEvents;
     }
 
     /**

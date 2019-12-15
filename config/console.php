@@ -25,6 +25,12 @@ $config = [
                 ],
             ],
         ],
+
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' => true
+        ],
+
         'db' => $db,
         /*
          * Роли для пользователей

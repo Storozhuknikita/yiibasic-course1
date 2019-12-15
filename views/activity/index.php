@@ -7,8 +7,10 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\search\ActivitySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$this->params['breadcrumbs'][] = ['label' => 'Панель управления', 'url' => ['/admin']];
 $this->title = 'Activities';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="activity-index">
 
@@ -27,15 +29,46 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'title',
-            'started_at:datetime',
-            'finished_at:datetime',
             [
-                'attribute' => 'author_id',
-                'value' => function ($data) {
-                    return \app\models\User::findOne($data->author_id)->username;
-                },
+                'attribute' => 'started_at',
+                'filter' => \kartik\date\DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'started_at',
+                    'language' => 'ru',
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'todayHighlight' => true,
+                        'format' => 'dd.mm.yyyy',
+                    ],
+                ]),
+                'value'=> function (\app\models\Activity $model) {
+                    return Yii::$app->formatter->asDatetime($model->started_at);
+                }
             ],
-            //'main',
+            [
+                'attribute' => 'finished_at',
+                'filter' => \kartik\date\DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'finished_at',
+                    'language' => 'ru',
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'todayHighlight' => true,
+                        'format' => 'dd.mm.yyyy',
+                    ],
+                ]),
+                'value'=> function (\app\models\Activity $model) {
+                    return Yii::$app->formatter->asDatetime($model->finished_at);
+                }
+            ],
+            [
+                'attribute' => 'authorEmail',
+                'format' => 'raw',
+                'value' => function (\app\models\Activity $model) {
+                    return Html::a($model->author->email, ['/user/view', 'id' => $model->author->id]);
+                }
+            ],
+            'main',
             //'cycle',
             //'created_at',
             //'updated_at',

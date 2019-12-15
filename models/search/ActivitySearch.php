@@ -11,14 +11,26 @@ use app\models\Activity;
  */
 class ActivitySearch extends Activity
 {
+
+    public $authorEmail;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'started_at', 'finished_at', 'author_id', 'main', 'cycle', 'created_at', 'updated_at'], 'integer'],
+            [['id',
+                'finished_at',
+                'author_id',
+                'main',
+                'cycle',
+                'created_at',
+                'updated_at'],
+                'integer'],
             [['title'], 'safe'],
+            [['authorEmail'], 'string'],
+            [['started_at'], 'date', 'format' => 'php:d.m.Y'],
+            [['finished_at'], 'date', 'format' => 'php:d.m.Y'],
         ];
     }
 
@@ -56,10 +68,24 @@ class ActivitySearch extends Activity
             return $dataProvider;
         }
 
+        /**
+         * Валидация даты. Формируем правильный запрос для поиска. Начало дня и конец дня.
+         */
+        if (!empty($this->started_at)) {
+            $this->filterByDate('started_at', $query);
+        }
+        if (!empty($this->finished_at)) {
+            $this->filterByDate('finished_at', $query);
+        }
+        if (!empty($this->authorEmail)) {
+            $query->joinWith('author as author');
+            $query->andWhere(['like', 'author.email', $this->authorEmail]);
+        }
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'started_at' => $this->started_at,
+            //'started_at' => $this->started_at,
             'finished_at' => $this->finished_at,
             'author_id' => $this->author_id,
             'main' => $this->main,
@@ -68,8 +94,30 @@ class ActivitySearch extends Activity
             'updated_at' => $this->updated_at,
         ]);
 
+        if (empty($this->title) && $this->title === '0'){
+
+        }
+
         $query->andFilterWhere(['like', 'title', $this->title]);
 
         return $dataProvider;
     }
+
+    /**
+     * @param $attr
+     * @param $query
+     *
+     */
+    private function filterByDate($attr, $query)
+    {
+        $dayStart = (int)\Yii::$app->formatter->asTimestamp($this->$attr . ' 00:00:00');
+        $dayStop = (int)\Yii::$app->formatter->asTimestamp($this->$attr . ' 23:59:59');
+        $query->andFilterWhere([
+            'between',
+            self::tableName() . ".$attr",
+            $dayStart,
+            $dayStop,
+        ]);
+    }
+
 }

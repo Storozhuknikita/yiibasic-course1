@@ -4,16 +4,15 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Activity */
+/* @var $model app\models\User */
 
-$this->title = $model->title;
+$this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Панель управления', 'url' => ['/admin']];
-$this->params['breadcrumbs'][] = ['label' => 'Activities', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
-
 ?>
-<div class="activity-view">
+<div class="user-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -32,17 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'title',
-            'started_at:datetime',
-            'finished_at:datetime',
-            'author_id',
-            [
-                'attribute' => 'main',
-                'value' => function (\app\models\Activity $model) {
-                    return $model->main ? "Да" : "Нет";
-                },
-            ],
-            'cycle:boolean',
+            'username',
+            'auth_key',
+            'password_hash',
+            'password_reset_token',
+            'email:email',
+            'status',
             'created_at:datetime',
             'updated_at:datetime',
         ],

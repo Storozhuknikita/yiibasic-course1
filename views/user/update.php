@@ -3,15 +3,15 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Activity */
+/* @var $model app\models\User */
 
-$this->title = 'Update Activity: ' . $model->title;
+$this->title = 'Update User: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Панель управления', 'url' => ['/admin']];
-$this->params['breadcrumbs'][] = ['label' => 'Activities', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="activity-update">
+<div class="user-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

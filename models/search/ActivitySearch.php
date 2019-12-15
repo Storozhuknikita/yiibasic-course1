@@ -48,13 +48,38 @@ class ActivitySearch extends Activity
      *
      * @param array $params
      *
+     * @param bool $forCurrentUser
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search( array $params, bool $forCurrentUser ) {
+        $this->load($params);
         $query = Activity::find();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+        if ($this->validate()) {
+            $query->andFilterWhere([
+                'id' => $this->id,
+                'started_at' => $this->started_at,
+                'finished_at' => $this->finished_at,
+                'main' => $this->main,
+                'cycle' => $this->cycle,
+                'created_at' => $this->created_at,
+                'updated_at' => $this->updated_at,
+                'author_id' => $forCurrentUser ? \Yii::$app->user->id : $this->author_id
+            ])
+                ->andFilterWhere(['like', 'title', $this->title]);
+        }
+        if (!$forCurrentUser && $this->author) {
+            $query->joinWith('author as author')
+                ->andWhere(['like', 'author.username', $this->author]);
+        }
+        return $dataProvider;
+    }
+        /*
 
-        // add conditions that should always apply here
+//        $query = Activity::find()->joinWith('users')
+  //          ->where(['user.id' => \Yii::$app->user->identity->id]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -71,6 +96,7 @@ class ActivitySearch extends Activity
         /**
          * Валидация даты. Формируем правильный запрос для поиска. Начало дня и конец дня.
          */
+        /*
         if (!empty($this->started_at)) {
             $this->filterByDate('started_at', $query);
         }
@@ -92,6 +118,8 @@ class ActivitySearch extends Activity
             'cycle' => $this->cycle,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'author_id' => $forCurrentUser ? \Yii::$app->user->id : $this->author_id
+
         ]);
 
         if (empty($this->title) && $this->title === '0'){
@@ -101,7 +129,8 @@ class ActivitySearch extends Activity
         $query->andFilterWhere(['like', 'title', $this->title]);
 
         return $dataProvider;
-    }
+        }
+        */
 
     /**
      * @param $attr

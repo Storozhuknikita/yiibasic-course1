@@ -6,18 +6,70 @@ use Yii;
 use app\models\User;
 use app\models\search\UserSearch;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * UserController implements the CRUD actions for User model.
  */
-class UserController extends Controller
+class UserController extends BaseController
 {
     private $password;
     private $email;
     private $username;
+
+
+    /**
+     * @return array
+     * Доступ
+     */
+    public function behaviors()
+    {
+        /**
+         * Нужно будет разделить права для админа и для пользователей.
+         * По ошибке использовал 1 контролер
+         * Сейчас есть дырка. Любой пользователь может отредактировать любого пользователя
+         */
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create', 'delete', 'submit'],
+                        'roles' => ['admin']
+                    ],
+                    [
+                        'actions' => ['profile', 'calendar', 'update', 'view'],
+                        'allow' => true,
+                    ],
+                ],
+            ]
+        ];
+    }
+
+
+    /**
+     * @return string
+     * @throws NotFoundHttpException
+     * Профиль пользователя
+     */
+    public function actionProfile() {
+        $model = User::findOne( [ 'id' => Yii::$app->user->id ]);
+        if ( $model ) {
+            return $this->render('profile', [
+                'model' => $model,
+            ]);
+        }
+        throw new NotFoundHttpException();
+    }
+
+    /**
+     * @return string
+     * Календарь пользователя
+     */
+    public function actionCalendar() {
+        return $this->render('calendar', ['user' => Yii::$app->user]);
+    }
 
     /**
      * {@inheritdoc}
@@ -35,26 +87,6 @@ class UserController extends Controller
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-        ];
-    }
-
-    /**
-     * @return array
-     * Доступ
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['index', 'create', 'view', 'delete', 'submit', 'update'],
-                        'roles' => ['admin']
-                    ],
-                ],
-            ]
         ];
     }
 
@@ -86,6 +118,8 @@ class UserController extends Controller
         ]);
     }
 
+
+
     /**
      * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -97,10 +131,6 @@ class UserController extends Controller
         $model = new User();
 
         $user_data = Yii::$app->request->post('User');
-
-//        echo'<pre>';
-  //      print_r($user_data['username']);
-    //    echo'</pre>';
 
         $model->username = $user_data['username'];
         $model->email = $user_data['email'];

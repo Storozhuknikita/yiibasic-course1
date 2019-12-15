@@ -1,6 +1,15 @@
 <?php
 
-$params = require __DIR__ . '/params.php';
+$configFile = __DIR__ . '/data1.php';
+$paramsFile = require __DIR__ . '/params.php';
+
+$dataFile = [];
+if ( file_exists($configFile) ) {
+    $dataFile = require $configFile;
+}
+
+$params = array_merge( $paramsFile, $dataFile );
+
 $db = require __DIR__ . '/db.php';
 
 $config = [
@@ -13,6 +22,10 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    // календарь
+    'defaultRoute' => ['user/calendar'],
+    // а это на случай технических работ
+    //'catchAll' => ['site/about'],
     /*
      * Add modules
      */
@@ -54,7 +67,15 @@ $config = [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'useFileTransport' => false, // true если локально
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.mail.ru',
+                'username' => $params['senderEmail'],
+                'password' => $params['senderPassword'],
+                'port' => '465',
+                'encryption' => 'ssl',
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -71,6 +92,9 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '/' => '/user/calendar',
+                '<action:(about|contact|login)>' => 'site/<action>', // скрывает /site
+                //'calendar/<ids:\d+>' => 'calendar/view' // подставлять id
             ],
         ],
         /*

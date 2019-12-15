@@ -37,6 +37,8 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function behaviors()
     {
+
+        // подключить кеширование
         return [
             [
                 'class' => TimestampBehavior::class,

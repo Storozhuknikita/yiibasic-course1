@@ -3,6 +3,11 @@
 namespace app\behaviors;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
+
+/**
+ * Class ActiveRecordCache
+ * @package app\behaviors
+ */
 class ActiveRecordCache extends Behavior
 {
     public $cacheKeyName;

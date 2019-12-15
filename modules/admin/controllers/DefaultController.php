@@ -6,6 +6,7 @@
 namespace app\modules\admin\controllers;
 
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\helpers\Url;
 
 class DefaultController extends \yii\web\Controller

@@ -30,6 +30,18 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        // не удалось запустить у себя
+        /*'cache' => [
+            'class' => 'yii\caching\MemCache',
+            'useMemcached' => true,
+            'servers' => [
+                [
+                    'host' => '127.0.0.1',
+                    'port' => 11211
+                ],
+            ],
+        ],*/
+
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,

@@ -8,6 +8,11 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+<?php
+Yii::$app->cache->set('test', 42);
+echo Yii::$app->cache->get('test');
+?>
+
 <div class="activity-form">
 
     <?php $form = ActiveForm::begin(); ?>

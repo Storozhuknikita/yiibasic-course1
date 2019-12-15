@@ -94,6 +94,8 @@ $config = [
             'rules' => [
                 '/' => '/user/calendar',
                 '<action:(about|contact|login)>' => 'site/<action>', // скрывает /site
+                'activity/view/<id:\d+>' => 'activity/view/',
+                'activity/update/<id:\d+>' => 'activity/update/',
                 //'calendar/<ids:\d+>' => 'calendar/view' // подставлять id
             ],
         ],

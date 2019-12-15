@@ -16,9 +16,11 @@ b. Дата окончания не могла бы быть меньше дат
 namespace app\controllers;
 
 use edofre\fullcalendar\models\Event;
+use PHPUnit\Util\Log\JUnit;
 use Yii;
 use app\models\Activity;
 use app\models\search\ActivitySearch;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -84,6 +86,8 @@ class ActivityController extends BaseController
                     'editable'         => true,
                     'startEditable'    => true,
                     'durationEditable' => true,
+                    'color'             => 'red',
+                    'url' => Url::to(['activity/view', 'id' => $activity->id])
                 ]);
             }
         }
